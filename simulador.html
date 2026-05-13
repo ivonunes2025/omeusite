@@ -73,49 +73,73 @@
         <p class="form-subtitle">Preencha o formulário para receber a sua simulação gratuita.</p>
       </div>
 
-      <form class="simulator-form" id="sim-form-page">
+      <form class="simulator-form" id="sim-form-page" novalidate>
         <div class="form-row">
           <div class="form-group">
-            <label>Nome do Negócio</label>
-            <input type="text" placeholder="Ex: Café Central" required>
+            <label for="sim-nome">Nome do Negócio</label>
+            <input id="sim-nome" name="nome" type="text" placeholder="Ex: Café Central" required>
           </div>
           <div class="form-group">
-            <label>Ramo de Atividade</label>
-            <input type="text" placeholder="Ex: Restauração, Imobiliária..." required>
+            <label for="sim-ramo">Ramo de Atividade</label>
+            <input id="sim-ramo" name="ramo" type="text" placeholder="Ex: Restauração, Imobiliária..." required>
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-group">
-            <label>Cores de Preferência</label>
-            <input type="text" placeholder="Ex: Azul Marinho e Dourado">
+            <label for="sim-cores">Cores de Preferência</label>
+            <input id="sim-cores" name="cores" type="text" placeholder="Ex: Azul Marinho e Dourado">
           </div>
           <div class="form-group">
-            <label>Website de Inspiração (Opcional)</label>
-            <input type="url" placeholder="https://exemplo.com">
+            <label for="sim-inspiracao">Website de Inspiração (Opcional)</label>
+            <input id="sim-inspiracao" name="inspiracao" type="url" placeholder="https://exemplo.com">
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-group">
-            <label>O seu E-mail</label>
-            <input type="email" placeholder="nome@empresa.com" required>
+            <label for="sim-email">O seu E-mail</label>
+            <input id="sim-email" name="email" type="email" placeholder="nome@empresa.com" required>
           </div>
           <div class="form-group">
-            <label>Telemóvel / WhatsApp</label>
-            <input type="tel" placeholder="+351 9xx xxx xxx" required>
+            <label for="sim-telefone">Telemóvel / WhatsApp</label>
+            <input id="sim-telefone" name="telefone" type="tel" placeholder="+351 9xx xxx xxx" required>
           </div>
         </div>
 
         <div class="form-group">
-          <label>Mensagem ou Observações Adicionais</label>
-          <textarea placeholder="Conte-nos um pouco mais sobre os seus objetivos..."></textarea>
+          <label for="sim-mensagem">Mensagem ou Observações Adicionais</label>
+          <textarea id="sim-mensagem" name="mensagem"
+            placeholder="Conte-nos um pouco mais sobre os seus objetivos..."></textarea>
         </div>
 
-        <button type="submit" class="btn-simulate">Solicitar Pré-visualização Gratuita</button>
+        <button type="submit" class="btn-simulate" id="sim-submit-btn">
+          <span id="sim-btn-text">Solicitar Pré-visualização Gratuita</span>
+          <span id="sim-btn-loading" style="display:none;">A enviar...</span>
+        </button>
         <p class="form-note">Ao clicar, concorda em ser contactado pela ON DIGITAL para fins de apresentação da
           proposta.</p>
       </form>
+
+      <!-- SUCESSO -->
+      <div id="sim-success" style="display:none; text-align:center; padding: 60px 20px;">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" style="margin: 0 auto 24px; display:block;">
+          <circle cx="32" cy="32" r="31" stroke="#C9A84C" stroke-width="2" />
+          <path d="M18 32L28 42L46 22" stroke="#C9A84C" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+        <h3 style="font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: #C9A84C; margin: 0 0 12px;">Pedido
+          Recebido!</h3>
+        <p style="color: #9E9E8E; max-width: 400px; margin: 0 auto; line-height: 1.7;">A nossa equipa analisará o seu
+          pedido e entrará em contacto em menos de <strong style="color:#F5F2EC;">48 horas</strong>.</p>
+      </div>
+
+      <!-- ERRO -->
+      <div id="sim-error"
+        style="display:none; text-align:center; padding: 20px; background: rgba(180,40,40,0.1); border: 1px solid rgba(180,40,40,0.3); border-radius: 8px; margin-top: 20px;">
+        <p style="color: #e07070; margin: 0;">Ocorreu um erro ao enviar. Por favor tente novamente ou contacte-nos
+          diretamente pelo WhatsApp.</p>
+      </div>
     </div>
   </section>
 
@@ -188,6 +212,59 @@
   </footer>
 
   <script src="script.js"></script>
+  <script>
+    (function () {
+      // ⚠️ SUBSTITUI ESTA URL PELA URL DO TEU GOOGLE APPS SCRIPT
+      var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzK9wNRYKQ2jQcwq9D-BcNS04BYVGrErRe_5W-Sox6irmoWhVcFDN80OYIjLkgofb7eyg/exec";
+
+      var form = document.getElementById("sim-form-page");
+      var submitBtn = document.getElementById("sim-submit-btn");
+      var btnText = document.getElementById("sim-btn-text");
+      var btnLoading = document.getElementById("sim-btn-loading");
+      var successDiv = document.getElementById("sim-success");
+      var errorDiv = document.getElementById("sim-error");
+
+      if (!form) return;
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        errorDiv.style.display = "none";
+        submitBtn.disabled = true;
+        btnText.style.display = "none";
+        btnLoading.style.display = "inline";
+
+        var formData = new FormData(form);
+        var payload = {
+          nome: formData.get("nome") || "",
+          ramo: formData.get("ramo") || "",
+          cores: formData.get("cores") || "",
+          inspiracao: formData.get("inspiracao") || "",
+          email: formData.get("email") || "",
+          telefone: formData.get("telefone") || "",
+          mensagem: formData.get("mensagem") || "",
+        };
+
+        try {
+          // Enviar via GET com parâmetros na URL
+          var params = new URLSearchParams(payload);
+          await fetch(APPS_SCRIPT_URL + "?" + params.toString(), {
+            method: "GET",
+            mode: "no-cors",
+          });
+
+          // Assumir sucesso
+          form.style.display = "none";
+          successDiv.style.display = "block";
+        } catch (err) {
+          console.error("Erro ao enviar formulário:", err);
+          errorDiv.style.display = "block";
+          submitBtn.disabled = false;
+          btnText.style.display = "inline";
+          btnLoading.style.display = "none";
+        }
+      });
+    })();
+  </script>
 
 </body>
 
