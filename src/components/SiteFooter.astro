@@ -1,0 +1,63 @@
+---
+export interface Props {
+  /** "root" = #secção; "sub" = /#secção (links para secções na home) */
+  sectionPrefix: "root" | "sub";
+}
+
+const { sectionPrefix } = Astro.props;
+const p = sectionPrefix === "root" ? "#" : "/#";
+const h = (id: string) => `${p}${id}`;
+---
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="footer-logo">ON<span>DIGITAL</span></a>
+      <p class="footer-tagline">
+        A elevar marcas através de design excecional e tecnologia inovadora.
+      </p>
+    </div>
+    <div>
+      <h4 class="footer-link-title">Navegação</h4>
+      <ul class="footer-links grid-2">
+        <li><a href={h("servicos")}>Serviços</a></li>
+        <li><a href={h("processo")}>Processo</a></li>
+        <li><a href={h("precos")}>Preços</a></li>
+        <li><a href={h("contacto")}>Contacto</a></li>
+        <li><a href="/sobre">Sobre Nós</a></li>
+        <li><a href={h("strapi")}>Strapi CMS</a></li>
+        <li><a href="/simulador">Simulador</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="footer-link-title">Contacto</h4>
+      <ul class="footer-links">
+        <li>
+          <a href="mailto:ondigitalx@gmail.com">ondigitalx@gmail.com</a>
+        </li>
+        <li><a href="tel:+351911105998">+351 911 105 998</a></li>
+        <li>
+          <a href="https://wa.me/351911105998" target="_blank" rel="noopener noreferrer"
+            >WhatsApp</a
+          >
+        </li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="footer-link-title">Social</h4>
+      <ul class="footer-links">
+        <li>
+          <a
+            href="https://www.instagram.com/on_digitalx/"
+            target="_blank"
+            rel="noopener noreferrer">Instagram</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 ON DIGITAL. Todos os direitos reservados.</p>
+    <p>Feito com &hearts; em Portugal</p>
+  </div>
+</footer>

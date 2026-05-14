@@ -1,25 +1,13 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
 ---
 
-<Layout title="Simulador — ON DIGITAL">
-  <div class="bg-glow"></div>
-
-  <nav>
-    <a href="/" class="nav-logo">ON<span>DIGITAL</span></a>
-    <ul class="nav-links">
-      <li><a href="/#servicos">Serviços</a></li>
-      <li><a href="/#processo">Processo</a></li>
-      <li><a href="/#precos">Preços</a></li>
-      <li><a href="/#contacto">Contacto</a></li>
-      <li>
-        <a href="/simulador" style="color: var(--gold); font-weight: 600;"
-          >Simulador</a>
-      </li>
-    </ul>
-    <a href="/#contacto" class="nav-cta">Começar Projeto</a>
-  </nav>
-
+<SiteLayout
+  title="Simulador — ON DIGITAL"
+  sectionPrefix="sub"
+  navLogoHref="/"
+  cta="none"
+>
   <section class="simulator-hero">
     <div class="simulator-hero-content">
       <div class="section-label">
@@ -58,7 +46,7 @@ import Layout from "../layouts/Layout.astro";
         <div class="info-icon">03</div>
         <h3 class="info-title">Receba a Proposta</h3>
         <p class="info-text">
-          Em menos de 48 internal hours, enviamos-lhe uma maquete digital para
+          Em menos de 4, enviamos-lhe uma maquete digital para
           que possa ver exatamente como a sua marca brilhará online.
         </p>
       </div>
@@ -301,49 +289,4 @@ import Layout from "../layouts/Layout.astro";
       </div>
     </div>
   </section>
-
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <a href="/" class="footer-logo">ON<span>DIGITAL</span></a>
-        <p class="footer-tagline">
-          A elevar marcas através de design excecional e tecnologia inovadora.
-        </p>
-      </div>
-      <div>
-        <h4 class="footer-link-title">Navegação</h4>
-        <ul class="footer-links">
-          <li><a href="/#servicos">Serviços</a></li>
-          <li><a href="/#processo">Processo</a></li>
-          <li><a href="/#precos">Preços</a></li>
-          <li><a href="/simulador">Simulador</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="footer-link-title">Contacto</h4>
-        <ul class="footer-links">
-          <li>
-            <a href="mailto:ondigitalx@gmail.com">ondigitalx@gmail.com</a>
-          </li>
-          <li><a href="tel:+351911105998">+351 911 105 998</a></li>
-          <li>
-            <a href="https://wa.me/351911105998" target="_blank">WhatsApp</a>
-          </li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="footer-link-title">Social</h4>
-        <ul class="footer-links">
-          <li>
-            <a href="https://www.instagram.com/on_digitalx/" target="_blank"
-              >Instagram</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2026 ON DIGITAL. Todos os direitos reservados.</p>
-      <p>Feito com &hearts; em Portugal</p>
-    </div>
-  </footer>
-</Layout>
+</SiteLayout>

@@ -1,0 +1,51 @@
+---
+import Layout from "./Layout.astro";
+import Nav from "../components/Nav.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+
+/** Props do <head> + envoltório com nav, bg-glow e rodapé */
+export interface Props {
+  title?: string;
+  description?: string;
+  canonicalURL?: string;
+  ogImage?: string;
+  /** "root" = âncoras #id na página atual; "sub" = /#id na home */
+  sectionPrefix: "root" | "sub";
+  /** Href do logótipo (ex.: "#" na home, "/" nas restantes) */
+  navLogoHref: string;
+  activeNav?: "sobre" | "simulador";
+  cta?: "simular" | "comecar" | "none";
+  showSimuladorInNav?: boolean;
+  navAriaLabel?: string;
+  navLogoAriaLabel?: string;
+}
+
+const {
+  title,
+  description,
+  canonicalURL,
+  ogImage,
+  sectionPrefix,
+  navLogoHref,
+  activeNav,
+  cta = "simular",
+  showSimuladorInNav = false,
+  navAriaLabel,
+  navLogoAriaLabel,
+} = Astro.props;
+---
+
+<Layout {title} {description} {canonicalURL} {ogImage}>
+  <div class="bg-glow"></div>
+  <Nav
+    logoHref={navLogoHref}
+    sectionPrefix={sectionPrefix}
+    active={activeNav}
+    cta={cta}
+    showSimuladorInNav={showSimuladorInNav}
+    aria-label={navAriaLabel}
+    logoAriaLabel={navLogoAriaLabel}
+  />
+  <slot />
+  <SiteFooter sectionPrefix={sectionPrefix} />
+</Layout>
