@@ -6,7 +6,7 @@
 export interface Props {
   logoHref: string;
   sectionPrefix: "root" | "sub";
-  active?: "sobre" | "simulador";
+  active?: "sobre" | "simulador" | "portfolio";
   cta?: "simular" | "comecar" | "none";
   showSimuladorInNav?: boolean;
   "aria-label"?: string;
@@ -32,19 +32,27 @@ const simStyle =
   active === "simulador"
     ? "color: var(--gold); font-weight: 600;"
     : undefined;
+const portStyle =
+  active === "portfolio"
+    ? "color: var(--gold); font-weight: 600;"
+    : undefined;
 ---
 
 <nav aria-label={navAria}>
   <a href={logoHref} class="nav-logo" aria-label={logoAriaLabel}
     >ON<span>DIGITAL</span></a
   >
-  <ul class="nav-links">
+
+  <ul class="nav-links" id="nav-links">
     <li><a href={h("servicos")}>Serviços</a></li>
     <li><a href={h("processo")}>Processo</a></li>
     <li><a href={h("precos")}>Preços</a></li>
     <li><a href={h("contacto")}>Contacto</a></li>
     <li>
       <a href="/sobre" style={sobreStyle}>Sobre Nós</a>
+    </li>
+    <li>
+      <a href="/portfolio" style={portStyle}>Portfólio</a>
     </li>
     {
       showSimuladorInNav && (
@@ -63,11 +71,39 @@ const simStyle =
       </a>
     )
   }
+
   {
     cta === "comecar" && (
-      <a href={contactoHref} class="nav-cta">
-        Começar Projeto
+      <a href="/simulador" class="nav-cta">
+        Fazer Simulação
       </a>
     )
   }
+
+  <button class="mobile-toggle" aria-label="Menu" id="mobile-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 </nav>
+
+<script>
+  const toggle = document.getElementById('mobile-toggle');
+  const links = document.getElementById('nav-links');
+  
+  toggle?.addEventListener('click', () => {
+    toggle.classList.toggle('active');
+    links?.classList.toggle('active');
+    document.body.style.overflow = links?.classList.contains('active') ? 'hidden' : '';
+  });
+
+  // Fechar menu ao clicar num link
+  const navItems = links?.querySelectorAll('a');
+  navItems?.forEach(item => {
+    item.addEventListener('click', () => {
+      toggle?.classList.remove('active');
+      links?.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  });
+</script>

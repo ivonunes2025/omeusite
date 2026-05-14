@@ -1,0 +1,97 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { services } from "../../data/servicesData.js";
+
+export function getStaticPaths() {
+  return services.map((service) => ({
+    params: { slug: service.slug },
+    props: { service },
+  }));
+}
+
+const { service } = Astro.props;
+---
+
+<SiteLayout
+  title={`Plano ${service.title} — On Digital`}
+  description={service.subtitle}
+  sectionPrefix="sub"
+  navLogoHref="/"
+  cta="simular"
+>
+  <article class="service-page">
+    <header class="service-hero">
+      <div class="service-hero-content">
+        <div class="section-label">{service.planNumber === "INFO" ? "Serviço" : `Plano ${service.planNumber}`}</div>
+        <h1 class="service-title">
+          {service.planNumber !== "INFO" && "Pack "}<span>{service.title}</span>
+        </h1>
+        <p class="service-subtitle">{service.subtitle}</p>
+      </div>
+      <div class="service-hero-visual">
+        <img src={service.image} alt={`Pré-visualização do Plano ${service.title}`} />
+      </div>
+    </header>
+
+    <section class="service-details">
+      <div class={service.planNumber === "INFO" ? "details-grid info-only" : "details-grid"}>
+        <div class="details-main">
+          <h2 class="details-title">O que é este serviço?</h2>
+          <div class="details-text" set:html={service.description}></div>
+
+          <div class="features-breakdown">
+            {service.features.map((feature) => (
+              <div class="feature-item">
+                <h3>{feature.title}</h3>
+                <p>{feature.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {service.planNumber === "INFO" && (
+            <div style="margin-top: 60px;">
+              <a href={service.ctaLink || "/#precos"} class="btn-primary">
+                <span>{service.ctaText}</span>
+              </a>
+            </div>
+          )}
+        </div>
+
+        {service.planNumber !== "INFO" && (
+          <aside class="details-sidebar">
+            <div class="summary-card">
+              <h3>Resumo do Plano</h3>
+              <ul>
+                {Object.entries(service.summary).map(([key, value]) => (
+                  <li>
+                    <strong style="text-transform: capitalize;">{key}:</strong>
+                    <span>{value}</span>
+                  </li>
+                ))}
+              </ul>
+              <div class="sidebar-divider"></div>
+              <p class="sidebar-note">Ideal para: {service.ideal}</p>
+              <a href={service.ctaLink || "https://wa.me/351911105998"} class="btn-primary" style="width: 100%; text-align: center; justify-content: center;">
+                <span>{service.ctaText}</span>
+              </a>
+            </div>
+          </aside>
+        )}
+      </div>
+    </section>
+
+    {service.planNumber !== "INFO" && (
+      <section class="service-faq">
+        <h2 class="faq-section-title">Dúvidas Frequentes</h2>
+        <div class="faq-grid">
+          {service.faq.map((item) => (
+            <div class="faq-item">
+              <h4>{item.q}</h4>
+              <p>{item.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+  </article>
+</SiteLayout>
